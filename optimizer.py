@@ -7,7 +7,9 @@ def optimize_season(longdata, week_start = 1, week_end = 17, blocked_teams = [])
     #blocked_teams = ['BAL','DAL','PHI','NYG','CIN']
     #week_start = 6 #inclusive
     #week_end = 15 #inclusive
-    
+
+    teams = longdata['team'].drop_duplicates()
+
     wts = []
     selects = []
     var_mappings = []
