@@ -1,4 +1,4 @@
-def optimize_season(week_start = 1, week_end = 17, blocked_teams = []):   
+def optimize_season(longdata, week_start = 1, week_end = 17, blocked_teams = []):   
     import numpy as np
     import pandas as pd
     import datetime
