@@ -1,7 +1,13 @@
-def optimize_season(week_start = 1, week_end = 17, blocked_teams = [], ):
-    blocked_teams = ['BAL','DAL','PHI','NYG','CIN']
-    week_start = 6 #inclusive
-    week_end = 15 #inclusive
+def optimize_season(week_start = 1, week_end = 17, blocked_teams = []):   
+    import numpy as np
+    import pandas as pd
+    import datetime
+    import cvxpy as cp
+
+    #blocked_teams = ['BAL','DAL','PHI','NYG','CIN']
+    #week_start = 6 #inclusive
+    #week_end = 15 #inclusive
+    
     wts = []
     selects = []
     var_mappings = []
@@ -29,3 +35,24 @@ def optimize_season(week_start = 1, week_end = 17, blocked_teams = [], ):
     for e, wk in enumerate(week_range):
         indices = list(range(32 * e, 32 * (e+1)))
         constraints.append(sum(selects[indices]) == 1)               
+        
+    #Team constraints
+    for e,t in enumerate(teams):
+        indices = [x + e for x in np.multiply(32,range(len(week_range)))]
+
+        if t in blocked_teams:
+            constraints.append(sum(selects[indices]) == 0)
+        else:
+            constraints.append(sum(selects[indices]) <= 1)
+            
+    #Create the objective function, problem, and optimize
+    obj = cp.Maximize(np.multiply(weights,selects))
+    prob = cp.Problem(obj,constraints)
+    prob.solve()
+
+    results = pd.DataFrame(columns=['week','team','prob'])
+    for e,variable in enumerate(prob.variables()[0]):
+        if np.round(variable.value)==1:
+            results = results.append(var_mappings.iloc[e])
+
+    return results
