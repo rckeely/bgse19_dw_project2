@@ -7,23 +7,12 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash.dependencies import Input, Output
 app = dash.Dash('dash-tutorial')
-#analytics = records.Database('postgres://postgres@0.0.0.0/analytics')
-#res = analytics.query('select * from order_facts LEFT JOIN dates ON date_id = id')
-#df = pd.DataFrame(res.as_dict())
-
-# app.layout = html.Div([
-#     html.H1('Hello Dash'),
-#     html.Div([
-#         html.P('Dash converts Python classes into HTML'),
-#         html.P('This conversion happens behind the scenes by Dashs JavaScript front-end')
-#     ])
-# ])
-
 
 results_df = pd.read_csv('dummy_results.csv')
 weeks = results_df['week']
-team = results_df['team']
-all_weeks = range(1,17+1)
+teams = results_df['team']
+max_weeks = 17
+target_weeks = range(1,max_weeks+1)
 
 app.layout = \
     html.Div([
@@ -50,7 +39,7 @@ app.layout = \
                         html.P('Optimise through week:'),
                         dcc.Dropdown(
                             id='target_week',
-                            options=[{'label': str(i), 'value': i} for i in all_weeks],
+                            options=[{'label': str(i), 'value': i} for i in target_weeks],
                             value='',
                             placeholder='Final week',
                             multi=True
@@ -60,22 +49,24 @@ app.layout = \
                     html.Div([
                         html.Label('Checkboxes'),
                         html.Br(),
-                    	dcc.Checklist(options=[
-                                     {'label': 'CHI', 'value': 'CHI'},
-                                     {'label': 'BAL', 'value': 'BAL'},
-                                     {'label': 'DAL', 'value': 'DAL'},
-                                     {'label': 'CHI', 'value': 'LAR'},
-                                     {'label': 'BAL', 'value': 'PHI'},
-                                     {'label': 'DAL', 'value': 'NE'},
-                                     {'label': 'DAL', 'value': 'BUF'},
-                                     {'label': 'DAL', 'value': 'NO'},
-                                     {'label': 'DAL', 'value': 'SEA'},
-                                     ],
-                                     value=[]),
+                    	dcc.Checklist(id='teams',
+                                      options=[{'label': str(i), 'value': i} for i in teams],
+                                      value=[]
+                                     ),
                     ]),
                 ]),
             ]),
-            dbc.Col(html.Div("Main panel"))
+            dbc.Col([
+                html.Div([
+                	html.Div([
+                    	html.Label('Table'),
+                    	dbc.Table.from_dataframe(results_df,
+                                                striped=True,
+                                                bordered=True,
+                                                hover=True)
+                    	])
+                	]),
+                ])
             ]),
     ])
 app.run_server(debug=True)
