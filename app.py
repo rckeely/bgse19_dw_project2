@@ -16,38 +16,39 @@ target_weeks = range(1,max_weeks+1)
 
 app.layout = \
     html.Div([
-        dbc.Row(dbc.Col(html.Div("Hatch's Eliminator/Survivor Optimisation"))),
+        dbc.Row(dbc.Col(html.Div(className="mastHead",
+                                children=[html.H1("Hatch's Eliminator/Survivor Optimisation")]))),
         dbc.Row([
             dbc.Col([
-                html.Div([
+                html.Div(className="sidePanel", children=[
                     html.Div([
                         html.Button('Optimise!', id='button'),
                         html.Br(),
                     ]),
                     html.Div([
-                        html.P('Enter current league week:'),
+                        html.H3('Enter current league week:'),
                         dcc.Dropdown(
                             id='current_week',
                             options=[{'label': str(i), 'value': i} for i in weeks],
                             value='',
                             placeholder="Current week",
-                            multi=True
+                            multi=False
                         ),
                         html.Br()
                     ]),
                     html.Div([
-                        html.P('Optimise through week:'),
+                        html.H3('Optimise through week:'),
                         dcc.Dropdown(
                             id='target_week',
                             options=[{'label': str(i), 'value': i} for i in target_weeks],
                             value='',
                             placeholder='Final week',
-                            multi=True
+                            multi=False
                         ),
                         html.Br()
                     ]),
                     html.Div([
-                        html.Label('Checkboxes'),
+                        html.H3('Checkboxes:'),
                         html.Br(),
                     	dcc.Checklist(id='teams',
                                       options=[{'label': str(i), 'value': i} for i in teams],
@@ -57,7 +58,7 @@ app.layout = \
                 ]),
             ]),
             dbc.Col([
-                html.Div([
+                html.Div(className="mainPanel", children=[
                 	html.Div([
                     	html.Label('Table'),
                     	dbc.Table.from_dataframe(results_df,
