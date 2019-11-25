@@ -11,6 +11,7 @@ from dash.dependencies import Input, Output
 import os
 from optimizer import *
 from transform_elo import *
+from util_functions import *
 
 app = dash.Dash('dash-tutorial')
 
@@ -18,16 +19,16 @@ app = dash.Dash('dash-tutorial')
 mydata = pd.read_csv('data/elo/nfl_elo.csv')
 teams_full = pd.read_csv('configs/teams.csv')
 
-mydata = transform_elo_data(mydata)
+longdata = transform_elo_data(mydata)
 teams = teams_full['abb']
 
 blocked_teams = ['BAL']
 
-results_df = optimize_season(mydata, week_start=1, week_end=17, blocked_teams=blocked_teams)
-
 SEASON_LENGTH = 17
 weeks = list(range(1, SEASON_LENGTH + 1))
 target_weeks = list(range(1, SEASON_LENGTH + 1))
+
+x = get_table_div(longdata,1,17,blocked_teams=blocked_teams)
 
 # Colours
 # Dark Grey #5d5c61
@@ -98,26 +99,6 @@ app.layout = \
                                                 className="footer")]))),
     ])
 
-def fix_strings(string_var, start=False):
-    if string_var == '':
-        if start:
-            string_var = 1
-        else:
-            string_var = 17
-    else:
-        string_var = int(string_var)
-    return string_var
-
-
-def get_table_div(week_start, week_end, blocked_teams):
-    week_start = fix_strings(week_start, start=True)
-    week_end = fix_strings(week_end)
-    results_df = optimize_season(mydata, week_start=week_start,
-                                 week_end=week_end, blocked_teams=blocked_teams)
-    return html.Div(
-                dbc.Table.from_dataframe(df=results_df,
-                                    id="mainTable"))
-
 @app.callback(Output('tabs-content-example', 'children'),
               [Input('tabs-example', 'value'),
                Input('current_week', 'value'),
@@ -139,7 +120,7 @@ def render_content(tab, week_start, week_end, blocked_teams):
             )
         ])
     elif tab == 'probabilities_table':
-        return get_table_div(week_start, week_end, blocked_teams)
+        return get_table_div(longdata, week_start, week_end, blocked_teams)
     elif tab == 'projections_graph':
         return html.Div([
             html.H3('Tab content 3'),
