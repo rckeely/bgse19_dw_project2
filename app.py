@@ -52,8 +52,8 @@ app.layout = \
                         html.H3('Enter current league week:', className="sidePanel"),
                         dcc.Dropdown(
                             id='current_week',
-                            options=[{'label': str(i), 'value': i} for i in weeks],
-                            value='',
+                            options=[{'label': str(i), 'value': int(i)} for i in weeks],
+                            value=int(1),
                             placeholder="Current week",
                             multi=False
                         ),
@@ -82,11 +82,7 @@ app.layout = \
             ]),
             dbc.Col([
                 html.Div(className="mainPanel", children=[
-                	html.Div([
-                    	#html.Label('Table'),
-                    	dbc.Table.from_dataframe(results_df,
-                                                id="mainTable")
-                	])
+                	html.Div(id='main_table')
             	]),
             ])
         ]),
@@ -94,4 +90,16 @@ app.layout = \
                                 children=[html.H1("Footer",
                                                 className="footer")]))),
     ])
+# @app.callback(
+#     Output('mainTable', 'children'),
+#     [Input('current_week', 'value')]
+# )
+
+@app.callback(Output('main_table', 'children'),
+              [Input('current_week', 'value')])
+def update_weeks(week_start):
+    return html.Div(
+                dbc.Table.from_dataframe(df=optimize_season(mydata, week_start=week_start, week_end=17, blocked_teams=blocked_teams),
+                                    id="mainTable"))
+
 app.run_server(debug=True)
