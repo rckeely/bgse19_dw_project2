@@ -38,4 +38,4 @@ def get_table_div(longdata, week_start, week_end, blocked_teams):
                                    week_end=week_end, blocked_teams=blocked_teams)
     return html.Div(
                 dbc.Table.from_dataframe(df=results_df,
-                                    id="mainTable"))
+                                    id="main_table"))

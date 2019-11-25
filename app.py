@@ -38,19 +38,19 @@ x = get_table_div(longdata,1,17,blocked_teams=blocked_teams)
 # Sand #b1a296
 app.layout = \
     html.Div(className="container", children=[
-        dbc.Row(dbc.Col(html.Div(className="mastHead",
-                                children=[html.H1(className="mastHead", children=[html.Img(className="logo",
+        dbc.Row(dbc.Col(html.Div(className="mast_head",
+                                children=[html.H1(className="mast_head", children=[html.Img(className="logo",
                                                                                         src=app.get_asset_url ('nfl-league-logo.png'),),
                                                     f"Hatch's Eliminator/Survivor Optimisation",]),]))),
         dbc.Row([
             dbc.Col([
-                html.Div(className="sidePanel", children=[
+                html.Div(className="side_panel", children=[
                     # html.Div(className="subcomponent", children=[
                     #     html.Button('Optimise!', id='button'),
                     #     html.Br(),
                     # ]),
                     html.Div(className="subcomponent", children=[
-                        html.H3('Enter current league week:', className="sidePanel"),
+                        html.H3('Enter current league week:', className="side_panel"),
                         dcc.Dropdown(
                             id='current_week',
                             options=[{'label': str(i), 'value': i} for i in weeks],
@@ -61,7 +61,7 @@ app.layout = \
                         html.Br()
                     ]),
                     html.Div(className="subcomponent", children=[
-                        html.H3('Optimise through week:', className="sidePanel"),
+                        html.H3('Optimise through week:', className="side_panel"),
                         dcc.Dropdown(
                             id='target_week',
                             options=[{'label': str(i), 'value': i} for i in target_weeks],
@@ -72,7 +72,7 @@ app.layout = \
                         html.Br()
                     ]),
                     html.Div(className="subcomponent", children=[
-                        html.H3('Select Teams:', className="sidePanel"),
+                        html.H3('Select Teams:', className="side_panel"),
                         dcc.Checklist(id='blocked_teams',
                                       options=[{'label': str(i), 'value': i} for i in teams],
                                       value=[]
@@ -82,14 +82,14 @@ app.layout = \
                 ]),
             ]),
             dbc.Col([
-                html.Div(className="mainPanel", children=[
+                html.Div(className="main_panel", children=[
                 	html.Div([
                     	dcc.Tabs(id="tabs-example", value='team_selector', children=[
                             dcc.Tab(label='Team Selector', value='team_selector'),
                             dcc.Tab(label='Probabilities Table', value='probabilities_table'),
                             dcc.Tab(label='Projections Graph', value='projections_graph'),
                         ]),
-                        html.Div(id='tabs-content-example')
+                        html.Div(id='tabs-content-example', className='tab_content')
                 	])
             	]),
             ])
