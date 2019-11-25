@@ -22,7 +22,7 @@ teams_full = pd.read_csv('configs/teams.csv')
 longdata = transform_elo_data(mydata)
 teams = teams_full['abb']
 
-blocked_teams = ['BAL']
+blocked_teams = []
 
 SEASON_LENGTH = 17
 weeks = list(range(1, SEASON_LENGTH + 1))
@@ -106,7 +106,7 @@ app.layout = \
                Input('blocked_teams', 'value')])
 def render_content(tab, week_start, week_end, blocked_teams):
     if tab == 'team_selector':
-        return html.Div([
+        result = html.Div(className="render_div", children=[
             html.H3('Tab content 1'),
             dcc.Graph(
                 id='graph-1-tabs',
@@ -120,9 +120,9 @@ def render_content(tab, week_start, week_end, blocked_teams):
             )
         ])
     elif tab == 'probabilities_table':
-        return get_table_div(longdata, week_start, week_end, blocked_teams)
+        result = get_table_div(longdata, week_start, week_end, blocked_teams)
     elif tab == 'projections_graph':
-        return html.Div([
+        result = html.Div(className="render_div", children=[
             html.H3('Tab content 3'),
             dcc.Graph(
                 id='graph-3-tabs',
@@ -135,5 +135,5 @@ def render_content(tab, week_start, week_end, blocked_teams):
                 }
             )
         ])
-
+    return result
 app.run_server(debug=True)

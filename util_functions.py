@@ -36,6 +36,6 @@ def get_table_div(longdata, week_start, week_end, blocked_teams):
     week_end = fix_strings(week_end)
     results_df = generate_table_df(longdata, week_start=week_start,
                                    week_end=week_end, blocked_teams=blocked_teams)
-    return html.Div(
+    return html.Div(className="render_div", children=
                 dbc.Table.from_dataframe(df=results_df,
                                     id="main_table"))
