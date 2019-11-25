@@ -3,7 +3,7 @@ from optimizer import *
 def generate_table_df(longdata,week_start,week_end,blocked_teams):
     import pandas as pd
 
-    results_df = optimize_season(longdata, week_start=1, week_end=17, blocked_teams=blocked_teams)
+    results_df = optimize_season(longdata, week_start=week_start, week_end=week_end, blocked_teams=blocked_teams)
     longdata = longdata[['week','team','elo']]
     output = results_df.merge(longdata,how='left')
 
