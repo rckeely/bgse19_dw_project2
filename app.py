@@ -2,20 +2,32 @@ import dash
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
-#import records
+
 import pandas as pd
 import plotly.graph_objects as go
+
 from dash.dependencies import Input, Output
 
 import os
+from optimizer import *
+from transform_elo import *
 
 app = dash.Dash('dash-tutorial')
 
-results_df = pd.read_csv('dummy_results.csv')
-weeks = results_df['week']
-teams = results_df['team']
-max_weeks = 17
-target_weeks = range(1,max_weeks+1)
+#Get data
+mydata = pd.read_csv('data/elo/nfl_elo.csv')
+teams_full = pd.read_csv('configs/teams.csv')
+
+mydata = transform_elo_data(mydata)
+teams = teams_full['abb']
+
+blocked_teams = ['BAL']
+
+results_df = optimize_season(mydata, week_start=1, week_end=17, blocked_teams=blocked_teams)
+
+SEASON_LENGTH = 17
+weeks = list(range(1, SEASON_LENGTH + 1))
+target_weeks = list(range(1, SEASON_LENGTH + 1))
 
 # Colours
 # Dark Grey #5d5c61
