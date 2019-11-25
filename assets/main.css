@@ -1,0 +1,95 @@
+
+/* Colours:
+ * Dark Grey  #5d5c61
+ * Light Grey #379683
+ * Light blue #7a94ac
+ * Dark blue  #557a95
+ * Sand       #b1a296s
+ */
+
+html {
+    height: 100%;
+}
+
+body {
+  border-width: 0px;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+}
+
+div.mastHead {
+  background-color: #928e94;
+  width: 100%;
+  border-width: 0px;
+  margin: 0px 0px 0px 0px;
+  padding: 5px 5px 5px 5px;
+  vertical-align: middle;
+}
+
+div.sidePanel {
+  background-color: #7395ae;
+  float: left;
+  width: 20%;
+  margin: 0px 0px 0px 0px;
+  padding: 20px 20px 20px 20px;
+  border-width: 0px;
+}
+
+h1.mastHead {
+  color : #ffffff;
+}
+
+h3.sidePanel {
+  color : #ffffff;
+}
+
+div.mainPanel {
+  float: right;
+  margin: 0px 0px 0px 0px;
+  padding: 20px 20px 20px 20px;
+  border-width: 0px;
+  width: 70%;
+  height: 100%;
+}
+
+div.container {
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  border-width: 0px;
+}
+
+img.logo {
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  height: 100px;
+  width: 100px;
+}
+/* .mainTable {
+  color : #5d5c61;
+  border-collapse: collapse;
+  width: 100%;
+} */
+
+#mainTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#mainTable td, #customers th {
+  border: 1px solid #cccccc;
+  padding: 8px;
+}
+
+#mainTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #557a95;
+  color: white;
+}
+
+#mainTable tr:nth-child(even)
+{
+  background-color: #cccccc;
+}
