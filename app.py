@@ -83,6 +83,7 @@ app.layout = \
             ]),
             dbc.Col([
                 html.Div(className="main_panel", children=[
+                    html.Div(id='headline_stats',children=['this is a headline stat']),
                 	html.Div([
                     	dcc.Tabs(id="tabs-example", value='team_selector', children=[
                             dcc.Tab(label='Team Selector', value='team_selector'),
@@ -99,7 +100,8 @@ app.layout = \
                                                 className="footer")]))),
     ])
 
-@app.callback(Output('tabs-content-example', 'children'),
+@app.callback([Output('tabs-content-example', 'children'),
+               Output('headline_stats','children')],
               [Input('tabs-example', 'value'),
                Input('current_week', 'value'),
                Input('target_week', 'value'),
@@ -135,5 +137,5 @@ def render_content(tab, week_start, week_end, blocked_teams):
                 }
             )
         ])
-    return result
+    return result, 'this is a fun time game'
 app.run_server(debug=True)
