@@ -75,13 +75,25 @@ app.layout = \
                     ]),
                     html.Div(className="subcomponent", children=[
                         html.H3('Block Teams:', className="side_panel"),
-                        dcc.Checklist(id='blocked_teams',
-                                      options=[{'label': get_full_name(i) , 'value': i} for i in teams],
-                                      value=[],
-                                      className="check_list"
-                                     ),
-                        html.Br(),
+                        dcc.Dropdown(
+                            id='blocked_teams',
+                            options=[{'label': get_full_name(i) , 'value': i} for i in teams],
+                            value='',
+                            placeholder='Select Team',
+                            multi=True,
+                            className="side_controls"
+                        ),
+                        html.Br()
                     ]),
+                    # html.Div(className="subcomponent", children=[
+                    #     html.H3('Block Teams:', className="side_panel"),
+                    #     dcc.Checklist(id='blocked_teams',
+                    #                   options=[{'label': get_full_name(i) , 'value': i} for i in teams],
+                    #                   value=[],
+                    #                   className="check_list"
+                    #                  ),
+                    #     html.Br(),
+                    # ]),
                 ]),
             ]),
             dbc.Col([

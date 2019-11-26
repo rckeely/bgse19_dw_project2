@@ -3,3 +3,4 @@
 venv
 __pycache__/
 configs/googleMaps_API_key.json
+DWHW1.pem
