@@ -13,8 +13,8 @@ from optimizer import *
 from transform_elo import *
 from util_functions import *
 
-app = dash.Dash('dash-tutorial')
-
+app = dash.Dash('NFL Survivor Pool Optimiser')
+app.title = 'NFL Survivor Pool Optimiser'
 #Get data
 mydata = pd.read_csv('data/elo/nfl_elo.csv')
 teams_full = pd.read_csv('configs/teams.csv')
@@ -30,6 +30,14 @@ target_weeks = list(range(1, SEASON_LENGTH + 1))
 
 x = get_table_div(longdata,1,17,blocked_teams=blocked_teams)
 
+def get_thumbnail(path):
+   i = Image.open(path)
+   i.thumbnail((100, 100), Image.LANCZOS)
+   buff = BytesIO()
+   i.save(buff, format="PNG")
+   encoded_image = base64.b64encode(buff.getvalue()).decode('UTF-8')
+   return (html.Img(src='data:image/png;base64,{}'.format(encoded_image)))
+
 # Colours
 # Dark Grey #5d5c61
 # Light Grey #39683
@@ -39,9 +47,11 @@ x = get_table_div(longdata,1,17,blocked_teams=blocked_teams)
 app.layout = \
     html.Div(className="container", children=[
         dbc.Row(dbc.Col(html.Div(className="mast_head",
-                                children=[html.H1(className="mast_head", children=[html.Img(className="logo",
-                                                                                        src=app.get_asset_url ('nfl-league-logo.png'),),
-                                                    f"Hatch's Eliminator/Survivor Optimisation",]),]))),
+                children=[html.H1(className="mast_head",
+                                children=[html.Img(className="logo",
+                                                   src=app.get_asset_url('nfl-league-logo.png'),),
+                                         f"NFL Survivor Pool Optimiser",]),
+                        html.Hr(className="mast_head")]))),
         dbc.Row([
             dbc.Col([
                 html.Div(className="side_panel", children=[
@@ -56,7 +66,8 @@ app.layout = \
                             options=[{'label': str(i), 'value': i} for i in weeks],
                             value='',
                             placeholder="Current week",
-                            multi=False
+                            multi=False,
+                            className="side_controls"
                         ),
                         html.Br()
                     ]),
@@ -67,15 +78,17 @@ app.layout = \
                             options=[{'label': str(i), 'value': i} for i in target_weeks],
                             value='',
                             placeholder='Final week',
-                            multi=False
+                            multi=False,
+                            className="side_controls"
                         ),
                         html.Br()
                     ]),
                     html.Div(className="subcomponent", children=[
-                        html.H3('Select Teams:', className="side_panel"),
+                        html.H3('Block Teams:', className="side_panel"),
                         dcc.Checklist(id='blocked_teams',
                                       options=[{'label': str(i), 'value': i} for i in teams],
-                                      value=[]
+                                      value=[],
+                                      className="side_controls"
                                      ),
                         html.Br(),
                     ]),
@@ -83,7 +96,6 @@ app.layout = \
             ]),
             dbc.Col([
                 html.Div(className="main_panel", children=[
-                    html.Div(id='headline_stats',children=['this is a headline stat']),
                 	html.Div([
                     	dcc.Tabs(id="tabs-example", value='team_selector', children=[
                             dcc.Tab(label='Team Selector', value='team_selector'),
@@ -100,8 +112,7 @@ app.layout = \
                                                 className="footer")]))),
     ])
 
-@app.callback([Output('tabs-content-example', 'children'),
-               Output('headline_stats','children')],
+@app.callback(Output('tabs-content-example', 'children'),
               [Input('tabs-example', 'value'),
                Input('current_week', 'value'),
                Input('target_week', 'value'),
@@ -137,5 +148,5 @@ def render_content(tab, week_start, week_end, blocked_teams):
                 }
             )
         ])
-    return result, 'this is a fun time game'
+    return result
 app.run_server(debug=True)
