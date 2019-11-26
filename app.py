@@ -14,12 +14,14 @@ from transform_elo import *
 from util_functions import *
 
 app = dash.Dash('NFL Survivor Pool Optimiser')
+#app.config.suppress_callback_exceptions = True
 app.title = 'NFL Survivor Pool Optimiser'
 #Get data
 mydata = pd.read_csv('data/elo/nfl_elo.csv')
 teams_full = pd.read_csv('configs/teams.csv')
 
 longdata = transform_elo_data(mydata)
+static_df = pd.read_csv('data/nfl_lookup_table.csv')
 teams = teams_full['abb']
 
 blocked_teams = []
@@ -47,10 +49,6 @@ app.layout = \
         dbc.Row([
             dbc.Col([
                 html.Div(className="side_panel", children=[
-                    # html.Div(className="subcomponent", children=[
-                    #     html.Button('Optimise!', id='button'),
-                    #     html.Br(),
-                    # ]),
                     html.Div(className="subcomponent", children=[
                         html.H3('Enter current league week:', className="side_panel"),
                         dcc.Dropdown(
@@ -78,7 +76,7 @@ app.layout = \
                     html.Div(className="subcomponent", children=[
                         html.H3('Block Teams:', className="side_panel"),
                         dcc.Checklist(id='blocked_teams',
-                                      options=[{'label': str(i), 'value': i} for i in teams],
+                                      options=[{'label': get_full_name(i) , 'value': i} for i in teams],
                                       value=[],
                                       className="check_list"
                                      ),
@@ -91,7 +89,7 @@ app.layout = \
                 	html.Div([
                         html.Div(id="headline_stats", className="headline_stats"),
                     	dcc.Tabs(id="tabs-example", value='probabilities_table', children=[
-                            #dcc.Tab(label='Team Selector', value='team_selector'),
+                            dcc.Tab(label='Team Location', value='team_selector'),
                             dcc.Tab(label='Probabilities Table', value='probabilities_table'),
                             dcc.Tab(label='Projections Graph', value='projections_graph'),
                         ]),
@@ -105,6 +103,26 @@ app.layout = \
                                                 className="footer")]))),
     ])
 
+def get_selector_div(longdata, week_start, week_end, blocked_teams, static_df):
+     return html.Div(className="render_div", children=[
+        # html.Div(className="subcomponent", children=[
+        #         dcc.Checklist(id='blocked_teams',
+        #                       options=[{'label': str(i), 'value': i} for i in teams],
+        #                       value=[],
+        #                       className="check_list"
+        #                      ),
+        # ]),
+        dcc.Graph(
+            id='graph-1-tabs',
+            figure={
+                'data': [go.Scattergeo(
+                        lon = static_df['Longitude'],
+                        lat = static_df['Latitude'],
+                        text = static_df['TeamName'],
+                        mode = 'markers')],
+                'layout': go.Layout(geo_scope='usa')
+                })])
+
 @app.callback([Output('tabs-content-example', 'children'),
                Output('headline_stats', 'children')],
               [Input('tabs-example', 'value'),
@@ -112,22 +130,11 @@ app.layout = \
                Input('target_week', 'value'),
                Input('blocked_teams', 'value')])
 def render_content(tab, week_start, week_end, blocked_teams):
-    # if tab == 'team_selector':
-    #     result = html.Div(className="render_div", children=[
-    #         html.H3('Tab content 1'),
-    #         dcc.Graph(
-    #             id='graph-1-tabs',
-    #             figure={
-    #                 'data': [{
-    #                     'x': [1, 2, 3],
-    #                     'y': [3, 1, 2],
-    #                     'type': 'bar'
-    #                 }]
-    #             }
-    #         )
-    #     ])
-    # elif tab == 'probabilities_table':
-    if tab == 'probabilities_table':
+    if tab == 'team_selector':
+        result = get_selector_div(longdata, week_start,
+                            week_end, blocked_teams, static_df)
+    elif tab == 'probabilities_table':
+    # if tab == 'probabilities_table':
         result = get_table_div(longdata, week_start, week_end, blocked_teams)
     elif tab == 'projections_graph':
         result = html.Div(className="render_div", children=[
@@ -144,4 +151,5 @@ def render_content(tab, week_start, week_end, blocked_teams):
             )
         ])
     return result, "hello"
+
 app.run_server(debug=True)

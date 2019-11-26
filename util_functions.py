@@ -3,6 +3,8 @@ from PIL import Image
 from io import BytesIO
 import base64
 import dash_html_components as html
+import dash_core_components as dcc
+import plotly.graph_objects as go
 
 def get_full_name(short_code):
     full_names = { "ARI" : "Arizona Cardinals",
