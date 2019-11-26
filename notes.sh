@@ -33,5 +33,3 @@ pip install ipywidgets
 # Deploying with Dash and Electric Beanstalk
 # Getting this error :
 # NotAuthorizedError - Operation Denied. Access Denied
-# Access key : [ AKIASLSWBBLUIEOZVQGV ]
-# Secret Access key : [ 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 ]
