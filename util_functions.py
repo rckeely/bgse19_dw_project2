@@ -2,19 +2,15 @@ from optimizer import *
 from PIL import Image
 from io import BytesIO
 import base64
-import dash_html_components as html
-<<<<<<< HEAD
+
 import plotly.graph_objects as go
 import dash
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
+
 import numpy as np
 import pandas as pd
-=======
-import dash_core_components as dcc
-import plotly.graph_objects as go
->>>>>>> 66db4e6b2b4d7fd2406cf26852cd1e8c7e96a6d8
 
 def get_full_name(short_code):
     full_names = { "ARI" : "Arizona Cardinals",

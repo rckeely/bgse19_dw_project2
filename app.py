@@ -133,32 +133,10 @@ def get_selector_div(longdata, week_start, week_end, blocked_teams, static_df):
                Input('target_week', 'value'),
                Input('blocked_teams', 'value')])
 def render_content(tab, week_start, week_end, blocked_teams):
-<<<<<<< HEAD
-    # if tab == 'team_selector':
-    #     result = html.Div(className="render_div", children=[
-    #         html.H3('Tab content 1'),
-    #         dcc.Graph(
-    #             id='graph-1-tabs',
-    #             figure={
-    #                 'data': [{
-    #                     'x': [1, 2, 3],
-    #                     'y': [3, 1, 2],
-    #                     'type': 'bar'
-    #                 }]
-    #             }
-    #         )
-    #     ])
-    # elif tab == 'probabilities_table':
-    if tab == 'probabilities_table':
-        result = get_table_div(longdata, results_df, week_start, week_end, blocked_teams)
-=======
     if tab == 'team_selector':
-        result = get_selector_div(longdata, week_start,
-                            week_end, blocked_teams, static_df)
+        result = get_selector_div(longdata, week_start, week_end, blocked_teams, static_df)
     elif tab == 'probabilities_table':
-    # if tab == 'probabilities_table':
-        result = get_table_div(longdata, week_start, week_end, blocked_teams)
->>>>>>> 66db4e6b2b4d7fd2406cf26852cd1e8c7e96a6d8
+        result = get_table_div(longdata, results_df, week_start, week_end, blocked_teams)
     elif tab == 'projections_graph':
         result = get_projections_graph(longdata, results_df, week_start, week_end, blocked_teams)
     return result, "hello"
