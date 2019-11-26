@@ -89,8 +89,9 @@ app.layout = \
             dbc.Col([
                 html.Div(className="main_panel", children=[
                 	html.Div([
-                    	dcc.Tabs(id="tabs-example", value='team_selector', children=[
-                            dcc.Tab(label='Team Selector', value='team_selector'),
+                        html.Div(id="headline_stats", className="headline_stats"),
+                    	dcc.Tabs(id="tabs-example", value='probabilities_table', children=[
+                            #dcc.Tab(label='Team Selector', value='team_selector'),
                             dcc.Tab(label='Probabilities Table', value='probabilities_table'),
                             dcc.Tab(label='Projections Graph', value='projections_graph'),
                         ]),
@@ -104,27 +105,29 @@ app.layout = \
                                                 className="footer")]))),
     ])
 
-@app.callback(Output('tabs-content-example', 'children'),
+@app.callback([Output('tabs-content-example', 'children'),
+               Output('headline_stats', 'children')],
               [Input('tabs-example', 'value'),
                Input('current_week', 'value'),
                Input('target_week', 'value'),
                Input('blocked_teams', 'value')])
 def render_content(tab, week_start, week_end, blocked_teams):
-    if tab == 'team_selector':
-        result = html.Div(className="render_div", children=[
-            html.H3('Tab content 1'),
-            dcc.Graph(
-                id='graph-1-tabs',
-                figure={
-                    'data': [{
-                        'x': [1, 2, 3],
-                        'y': [3, 1, 2],
-                        'type': 'bar'
-                    }]
-                }
-            )
-        ])
-    elif tab == 'probabilities_table':
+    # if tab == 'team_selector':
+    #     result = html.Div(className="render_div", children=[
+    #         html.H3('Tab content 1'),
+    #         dcc.Graph(
+    #             id='graph-1-tabs',
+    #             figure={
+    #                 'data': [{
+    #                     'x': [1, 2, 3],
+    #                     'y': [3, 1, 2],
+    #                     'type': 'bar'
+    #                 }]
+    #             }
+    #         )
+    #     ])
+    # elif tab == 'probabilities_table':
+    if tab == 'probabilities_table':
         result = get_table_div(longdata, week_start, week_end, blocked_teams)
     elif tab == 'projections_graph':
         result = html.Div(className="render_div", children=[
@@ -140,5 +143,5 @@ def render_content(tab, week_start, week_end, blocked_teams):
                 }
             )
         ])
-    return result
+    return result, "hello"
 app.run_server(debug=True)

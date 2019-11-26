@@ -12,7 +12,7 @@ html {
     border-width: 0px;
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
-    overflow: hidden}
+    overflow: hidden;
 }
 
 body {
@@ -24,12 +24,21 @@ body {
 }
 
 div.mast_head {
-  background-color: #928e94;
+  background-color: #ffffff;
   width: 100%;
   border-width: 0px;
   margin: 0px 0px 0px 0px;
-  padding: 5px 5px 5px 5px;
+  padding: -10px;
   vertical-align: middle;
+}
+
+hr.mast_head {
+  height: 0px;
+  width: 100%;
+  color: #5d5c61;
+  border: solid;
+  /* border: 0px; */
+  border-top: 2px;
 }
 
 div.side_panel {
@@ -43,7 +52,7 @@ div.side_panel {
 }
 
 h1.mast_head {
-  color : #ffffff;
+  color : #557a95;
 }
 
 h3.side_panel {
@@ -68,8 +77,9 @@ div.container {
 img.logo {
   padding: 0px 0px 0px 0px;
   margin: 0px 0px 0px 0px;
-  height: 100px;
-  width: 100px;
+  height: 80px;
+  width: 80px;
+  vertical-align: middle;
 }
 .main_table {
   color : #5d5c61;
@@ -92,14 +102,23 @@ img.logo {
   overflow: auto;
 }
 
+.side_controls {
+  color: #557a95;
+}
+
+img.team_logos {
+  height: 60px;
+  width: 60px;
+}
+
 #main_table {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-#main_table td, #customers th {
-  border: 1px solid #cccccc;
+#main_table td, #main_table th {
+  border: 1px solid #ffffff;
   padding: 8px;
 }
 
@@ -107,7 +126,7 @@ img.logo {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;
-  background-color: #557a95;
+  background-color: #7a94ac;
   color: white;
 }
 
