@@ -30,14 +30,6 @@ target_weeks = list(range(1, SEASON_LENGTH + 1))
 
 x = get_table_div(longdata,1,17,blocked_teams=blocked_teams)
 
-def get_thumbnail(path):
-   i = Image.open(path)
-   i.thumbnail((100, 100), Image.LANCZOS)
-   buff = BytesIO()
-   i.save(buff, format="PNG")
-   encoded_image = base64.b64encode(buff.getvalue()).decode('UTF-8')
-   return (html.Img(src='data:image/png;base64,{}'.format(encoded_image)))
-
 # Colours
 # Dark Grey #5d5c61
 # Light Grey #39683
