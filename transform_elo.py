@@ -36,10 +36,10 @@ def transform_elo_data(rawdata):
     mydata = mydata[['date','season','week','team1','team2','elo1_pre','elo2_pre',
                      'elo_prob1','elo_prob2','score1','score2']]
 
-    team1 = mydata[['week','team1','elo_prob1']]
-    team1 = team1.rename(columns={'team1':'team','elo_prob1':'wp'})
-    team2 = mydata[['week','team2','elo_prob2']]
-    team2 = team2.rename(columns={'team2':'team','elo_prob2':'wp'})
+    team1 = mydata[['week','team1','elo_prob1','elo1_pre']]
+    team1 = team1.rename(columns={'team1':'team','elo_prob1':'wp','elo1_pre':'elo'})
+    team2 = mydata[['week','team2','elo_prob2','elo2_pre']]
+    team2 = team2.rename(columns={'team2':'team','elo_prob2':'wp','elo2_pre':'elo'})
 
     longdata = pd.concat([team1,team2]).drop_duplicates()
     longdata.sort_values(['week','team'])
