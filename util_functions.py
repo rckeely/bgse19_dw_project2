@@ -45,9 +45,9 @@ def get_thumbnail(short_code):
    buff = BytesIO()
    i.save(buff, format="PNG")
    encoded_image = base64.b64encode(buff.getvalue()).decode('UTF-8')
-   return (html.Div([html.Img(src='data:image/png;base64,{}'.format(encoded_image),
-                    className="team_logos"),
-                    html.P(get_full_name(short_code))]))
+   return (html.Div(className="team_names", children=[html.Img(src='data:image/png;base64,{}'.format(encoded_image),
+                            className="team_logos"),
+                    get_full_name(short_code)]))
 
 def generate_table_df(longdata,week_start,week_end,blocked_teams):
     import pandas as pd

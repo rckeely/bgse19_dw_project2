@@ -80,7 +80,7 @@ app.layout = \
                         dcc.Checklist(id='blocked_teams',
                                       options=[{'label': str(i), 'value': i} for i in teams],
                                       value=[],
-                                      className="side_controls"
+                                      className="check_list"
                                      ),
                         html.Br(),
                     ]),

@@ -92,6 +92,10 @@ img.logo {
 
 }
 
+.check_list {
+  color: #ffffff;
+}
+
 .tab_content {
   height: 100vh;
   overflow: auto;
@@ -106,9 +110,17 @@ img.logo {
   color: #557a95;
 }
 
+.team_names {
+  align-content: center;
+}
+
 img.team_logos {
   height: 60px;
   width: 60px;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  vertical-align: middle;
+  align: center;
 }
 
 #main_table {
