@@ -13,6 +13,8 @@ from optimizer import *
 from transform_elo import *
 from util_functions import *
 
+results_df = pd.DataFrame()
+
 app = dash.Dash('NFL Survivor Pool Optimiser')
 app.title = 'NFL Survivor Pool Optimiser'
 #Get data
@@ -28,7 +30,8 @@ SEASON_LENGTH = 17
 weeks = list(range(1, SEASON_LENGTH + 1))
 target_weeks = list(range(1, SEASON_LENGTH + 1))
 
-x = get_table_div(longdata,1,17,blocked_teams=blocked_teams)
+x = generate_table_df(longdata, week_start=1,
+                      week_end=17, blocked_teams=blocked_teams)
 
 # Colours
 # Dark Grey #5d5c61
@@ -128,20 +131,8 @@ def render_content(tab, week_start, week_end, blocked_teams):
     #     ])
     # elif tab == 'probabilities_table':
     if tab == 'probabilities_table':
-        result = get_table_div(longdata, week_start, week_end, blocked_teams)
+        result = get_table_div(longdata, results_df, week_start, week_end, blocked_teams)
     elif tab == 'projections_graph':
-        result = html.Div(className="render_div", children=[
-            html.H3('Tab content 3'),
-            dcc.Graph(
-                id='graph-3-tabs',
-                figure={
-                    'data': [{
-                        'x': [1, 2, 3],
-                        'y': [5, 10, 6],
-                        'type': 'bar'
-                    }]
-                }
-            )
-        ])
+        result = get_projections_graph(longdata, results_df, week_start, week_end, blocked_teams)
     return result, "hello"
 app.run_server(debug=True)
