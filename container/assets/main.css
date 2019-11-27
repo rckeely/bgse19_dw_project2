@@ -1,0 +1,150 @@
+
+/* Colours:
+ * Dark Grey  #5d5c61
+ * Light Grey #379683
+ * Light blue #7a94ac
+ * Dark blue  #557a95
+ * Sand       #b1a296s
+ */
+
+html {
+    height: 100%;
+    border-width: 0px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    overflow: hidden;
+}
+
+body {
+  height: 100%;
+  overflow: hidden;
+  border-width: 0px;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+}
+
+div.mast_head {
+  background-color: #ffffff;
+  width: 100%;
+  border-width: 0px;
+  margin: 0px 0px 0px 0px;
+  padding: -10px;
+  vertical-align: middle;
+}
+
+hr.mast_head {
+  height: 0px;
+  width: 100%;
+  color: #5d5c61;
+  border: solid;
+  /* border: 0px; */
+  border-top: 2px;
+}
+
+div.side_panel {
+  background-color: #7395ae;
+  float: left;
+  width: 20%;
+  height : 100vh;
+  margin: 0px 0px 0px 0px;
+  padding: 20px 20px 20px 20px;
+  border-width: 0px;
+}
+
+h1.mast_head {
+  color : #557a95;
+}
+
+h3.side_panel {
+  color : #ffffff;
+}
+
+div.main_panel {
+  float: right;
+  margin: 0px 0px 0px 0px;
+  padding: 20px 20px 20px 20px;
+  border-width: 0px;
+  width: 74%;
+  height: 100vh;
+}
+
+div.container {
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  border-width: 0px;
+}
+
+img.logo {
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  height: 80px;
+  width: 80px;
+  vertical-align: middle;
+}
+.main_table {
+  color : #5d5c61;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tab_container {
+  height:100vh;
+
+}
+
+.check_list {
+  color: #ffffff;
+  /* margin: 6px; */
+  /* width: 400px; */
+}
+
+.tab_content {
+  height: 100vh;
+  overflow: auto;
+}
+
+.render_div {
+  height: 500px;
+  overflow: auto;
+}
+
+.side_controls {
+  color: #557a95;
+}
+
+.team_names {
+  align-content: center;
+}
+
+img.team_logos {
+  height: 60px;
+  width: 60px;
+  padding: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
+  vertical-align: middle;
+  align: center;
+}
+
+#main_table {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#main_table td, #main_table th {
+  border: 1px solid #ffffff;
+  padding: 8px;
+}
+
+#main_table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #7a94ac;
+  color: white;
+}
+
+#main_table tr:nth-child(even)
+{
+  background-color: #cccccc;
+}
