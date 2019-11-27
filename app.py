@@ -78,13 +78,31 @@ app.layout = \
                     ]),
                     html.Div(className="subcomponent", children=[
                         html.H3('Block Teams:', className="side_panel"),
-                        dcc.Checklist(id='blocked_teams',
-                                      options=[{'label': get_full_name(i) , 'value': i} for i in teams],
-                                      value=[],
-                                      className="check_list"
-                                     ),
+                        #dcc.Checklist(id='blocked_teams',
+                        #              options=[{'label': get_full_name(i) , 'value': i} for i in teams],
+                        #              value=[],
+                        #              className="check_list"
+                        #             ),
                         html.Br(),
+                        dcc.Dropdown(
+                            id='blocked_teams',
+                            options=[{'label': get_full_name(i) , 'value': i} for i in teams],
+                            value='',
+                            placeholder='Select Team',
+                            multi=True,
+                            className="side_controls"
+                        ),
+                        html.Br()
                     ]),
+                    # html.Div(className="subcomponent", children=[
+                    #     html.H3('Block Teams:', className="side_panel"),
+                    #     dcc.Checklist(id='blocked_teams',
+                    #                   options=[{'label': get_full_name(i) , 'value': i} for i in teams],
+                    #                   value=[],
+                    #                   className="check_list"
+                    #                  ),
+                    #     html.Br(),
+                    # ]),
                 ]),
             ]),
             dbc.Col([
@@ -107,14 +125,7 @@ app.layout = \
     ])
 
 def get_selector_div(longdata, week_start, week_end, blocked_teams, static_df):
-     return html.Div(className="render_div", children=[
-        # html.Div(className="subcomponent", children=[
-        #         dcc.Checklist(id='blocked_teams',
-        #                       options=[{'label': str(i), 'value': i} for i in teams],
-        #                       value=[],
-        #                       className="check_list"
-        #                      ),
-        # ]),
+     return html.Div(className="map_div", children=[
         dcc.Graph(
             id='graph-1-tabs',
             figure={
@@ -123,7 +134,9 @@ def get_selector_div(longdata, week_start, week_end, blocked_teams, static_df):
                         lat = static_df['Latitude'],
                         text = static_df['TeamName'],
                         mode = 'markers')],
-                'layout': go.Layout(geo_scope='usa')
+                'layout': go.Layout(geo_scope='usa',
+                            width=1000,
+                            height=600)
                 })])
 
 @app.callback([Output('tabs-content-example', 'children'),
@@ -134,11 +147,11 @@ def get_selector_div(longdata, week_start, week_end, blocked_teams, static_df):
                Input('blocked_teams', 'value')])
 def render_content(tab, week_start, week_end, blocked_teams):
     if tab == 'team_selector':
-        result = get_selector_div(longdata, week_start, week_end, blocked_teams, static_df)
+        result = get_selector_div(longdata, week_start,week_end, blocked_teams, static_df)
     elif tab == 'probabilities_table':
         result = get_table_div(longdata, results_df, week_start, week_end, blocked_teams)
     elif tab == 'projections_graph':
         result = get_projections_graph(longdata, results_df, week_start, week_end, blocked_teams)
     return result, "hello"
 
-app.run_server(debug=True)
+app.run_server(host='0.0.0.0', port=8050, debug=True)

@@ -8,9 +8,7 @@ import dash
 import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
-
-import numpy as np
-import pandas as pd
+import plotly.graph_objects as go
 
 def get_full_name(short_code):
     full_names = { "ARI" : "Arizona Cardinals",
@@ -138,10 +136,10 @@ def get_projections_graph(longdata, results_df, week_start, week_end, blocked_te
                         x=0,
                         y=1.0
                     ),
-                    margin=dict(l=40, r=0, t=100, b=30)
+                    margin=dict(l=50, r=0, t=100, b=30)
                 )
             ),
-            style={'height': 500},
+            style={'height': 450},
             id='projections-graph'
         ))
 
