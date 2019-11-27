@@ -20,7 +20,7 @@ app = dash.Dash('NFL Survivor Pool Optimiser')
 app.title = 'NFL Survivor Pool Optimiser'
 #Get data
 mydata = pd.read_csv('data/elo/nfl_elo.csv')
-teams_full = pd.read_csv('configs/teams.csv')
+teams_full = pd.read_csv('data/teams.csv')
 
 longdata = transform_elo_data(mydata)
 static_df = pd.read_csv('data/nfl_lookup_table.csv')
