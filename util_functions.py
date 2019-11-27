@@ -2,8 +2,12 @@ from optimizer import *
 from PIL import Image
 from io import BytesIO
 import base64
+
+import plotly.graph_objects as go
+import dash
 import dash_html_components as html
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
 def get_full_name(short_code):
@@ -79,12 +83,7 @@ def fix_strings(string_var, start=False):
     return string_var
 
 
-def get_table_div(longdata, week_start, week_end, blocked_teams):
-    import dash
-    import dash_html_components as html
-    import dash_core_components as dcc
-    import dash_bootstrap_components as dbc
-
+def get_table_div(longdata, results_df, week_start, week_end, blocked_teams):
     week_start = fix_strings(week_start, start=True)
     week_end = fix_strings(week_end)
     results_df = generate_table_df(longdata, week_start=week_start,
@@ -92,3 +91,56 @@ def get_table_div(longdata, week_start, week_end, blocked_teams):
     return html.Div(className="render_div", children=
                 dbc.Table.from_dataframe(df=results_df,
                                     id="main_table"))
+
+
+def get_projections_graph(longdata, results_df, week_start, week_end, blocked_teams):
+    week_start = fix_strings(week_start, start=True)
+    week_end = fix_strings(week_end)
+
+    if results_df.shape[0] == 0:
+        results_df = generate_table_df(longdata, week_start=week_start,
+                                       week_end=week_end, blocked_teams=blocked_teams)
+
+    graph_df = results_df
+    graph_df['wp'] = [float(i[:(len(i)-1)]) / 100 for i in graph_df.WinProb]
+
+    graph_df['Optimized'] = graph_df.wp.cumprod()
+
+
+    output = html.Div(className = 'proj_graph',children=
+        dcc.Graph(
+            figure=dict(
+                data=[
+                    dict(
+                        x=graph_df['Week'],
+                        y=graph_df['Optimized'],
+                        #text=graph_df['Team'],
+                        name='Optimized',
+                        marker=dict(
+                            color='rgb(55, 83, 109)'
+                        ),
+                        fill='tozeroy'
+                    )
+                ],
+                layout=dict(
+                    title='Cumulative Survival Likelihood',
+                    font = dict(family= "Courier New, monospace",
+                            size=18,
+                            color='#7f7f7f'),
+                    xaxis = {'title': 'Week',
+                             'range': [week_start,week_end]},
+                    yaxis = {'range': [0,1],
+                             'tickformat': ',.0%'},
+                    showlegend=False,
+                    legend=dict(
+                        x=0,
+                        y=1.0
+                    ),
+                    margin=dict(l=50, r=0, t=100, b=30)
+                )
+            ),
+            style={'height': 450},
+            id='projections-graph'
+        ))
+
+    return output

@@ -23,13 +23,23 @@ python3 -m venv venv
 
 source venv/bin/activate
 
-# Install modules
+# Install modules for Dockerfile
 pip install dash==1.6.1 dash-daq==0.3.1 pandas
 pip install dash_bootstrap_components Image cvxpy
 
 # Maybe
 pip install ipywidgets
 
+
+docker run --name dash_app -d -p 8050:8050
+
+# Fixing dash app to run as server :
+# [ https://community.plot.ly/t/running-dash-app-in-docker-container/16067/3 ]
+
 # Deploying with Dash and Electric Beanstalk
 # Getting this error :
 # NotAuthorizedError - Operation Denied. Access Denied
+
+# Things left to do:
+# Deploy dash server
+#

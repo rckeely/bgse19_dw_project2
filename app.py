@@ -13,6 +13,8 @@ from optimizer import *
 from transform_elo import *
 from util_functions import *
 
+results_df = pd.DataFrame()
+
 app = dash.Dash('NFL Survivor Pool Optimiser')
 #app.config.suppress_callback_exceptions = True
 app.title = 'NFL Survivor Pool Optimiser'
@@ -30,7 +32,8 @@ SEASON_LENGTH = 17
 weeks = list(range(1, SEASON_LENGTH + 1))
 target_weeks = list(range(1, SEASON_LENGTH + 1))
 
-x = get_table_div(longdata,1,17,blocked_teams=blocked_teams)
+x = generate_table_df(longdata, week_start=1,
+                      week_end=17, blocked_teams=blocked_teams)
 
 # Colours
 # Dark Grey #5d5c61
@@ -75,6 +78,12 @@ app.layout = \
                     ]),
                     html.Div(className="subcomponent", children=[
                         html.H3('Block Teams:', className="side_panel"),
+                        #dcc.Checklist(id='blocked_teams',
+                        #              options=[{'label': get_full_name(i) , 'value': i} for i in teams],
+                        #              value=[],
+                        #              className="check_list"
+                        #             ),
+                        html.Br(),
                         dcc.Dropdown(
                             id='blocked_teams',
                             options=[{'label': get_full_name(i) , 'value': i} for i in teams],
@@ -138,25 +147,11 @@ def get_selector_div(longdata, week_start, week_end, blocked_teams, static_df):
                Input('blocked_teams', 'value')])
 def render_content(tab, week_start, week_end, blocked_teams):
     if tab == 'team_selector':
-        result = get_selector_div(longdata, week_start,
-                            week_end, blocked_teams, static_df)
+        result = get_selector_div(longdata, week_start,week_end, blocked_teams, static_df)
     elif tab == 'probabilities_table':
-    # if tab == 'probabilities_table':
-        result = get_table_div(longdata, week_start, week_end, blocked_teams)
+        result = get_table_div(longdata, results_df, week_start, week_end, blocked_teams)
     elif tab == 'projections_graph':
-        result = html.Div(className="render_div", children=[
-            html.H3('Tab content 3'),
-            dcc.Graph(
-                id='graph-3-tabs',
-                figure={
-                    'data': [{
-                        'x': [1, 2, 3],
-                        'y': [5, 10, 6],
-                        'type': 'bar'
-                    }]
-                }
-            )
-        ])
+        result = get_projections_graph(longdata, results_df, week_start, week_end, blocked_teams)
     return result, "hello"
 
 app.run_server(host='0.0.0.0', port=8050, debug=True)
