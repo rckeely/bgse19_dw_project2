@@ -33,6 +33,9 @@ pip install ipywidgets
 
 docker run --name dash_app -d -p 8050:8050
 
+# Fixing dash app to run as server :
+# [ https://community.plot.ly/t/running-dash-app-in-docker-container/16067/3 ]
+
 # Deploying with Dash and Electric Beanstalk
 # Getting this error :
 # NotAuthorizedError - Operation Denied. Access Denied
