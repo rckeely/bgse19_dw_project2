@@ -14,6 +14,7 @@ import plotly.graph_objects as go
 from optimizer import *
 from transform_elo import *
 from util_functions import *
+from get_elo_data import *
 
 # Colours
 # Dark Grey #5d5c61
@@ -28,6 +29,8 @@ app.title = 'BGSE NFL Survivor Pool Optimiser'
 
 
 # Get data
+getLatestELOData()
+
 mydata = pd.read_csv('data/elo/nfl_elo.csv')
 static_df = pd.read_csv('data/nfl_lookup_table.csv')
 longdata = transform_elo_data(mydata)

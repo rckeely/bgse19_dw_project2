@@ -8,7 +8,7 @@ def makeDirIfNotExists(my_dir):
         os.listdir(my_dir)
     except FileNotFoundError as e:
         print('Making data/archive directory.')
-        os.mkdir(my_dir)
+        os.makedirs(my_dir)
 
     return 1
 
