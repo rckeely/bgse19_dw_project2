@@ -34,6 +34,7 @@ getLatestELOData()
 mydata = pd.read_csv('data/elo/nfl_elo.csv')
 static_df = pd.read_csv('data/nfl_lookup_table.csv')
 longdata = transform_elo_data(mydata)
+optimizer = Optimizer(longdata)
 teams = static_df['ShortCode']
 SEASON_LENGTH = 17
 weeks = list(range(1, SEASON_LENGTH + 1))
@@ -42,9 +43,6 @@ thumbnails = initialize_thumbnails(static_df)
 
 #Initialize Params
 blocked_teams = []
-
-#results_df = optimize_season(longdata=longdata,week_start=week_start,week_end=week_end,blocked_teams=blocked_teams)
-results_df = pd.DataFrame()
 
 app.layout = \
     html.Div(className="container", children=[
@@ -124,12 +122,12 @@ app.layout = \
                Input('blocked_teams', 'value')])
 def render_content(tab, week_start, week_end, blocked_teams):
     if tab == 'team_selector':
-        result = get_selector_div(longdata, week_start, week_end, blocked_teams, static_df)
+        result = get_selector_div(static_df)
     elif tab == 'probabilities_table':
-        result = get_table_div(longdata, results_df, week_start, week_end, blocked_teams, thumbnails)
+        result = get_table_div(optimizer, week_start, week_end, blocked_teams, thumbnails)
     elif tab == 'projections_graph':
-        result = get_projections_graph(longdata=longdata, results_df=results_df,week_start=week_start,
-                                       week_end=week_end, blocked_teams=blocked_teams, thumbnails=thumbnails)
+        result = get_projections_graph(static_df=static_df, optimizer=optimizer,week_start=week_start,
+                                       week_end=week_end, blocked_teams=blocked_teams)
     return result
 
 if __name__ == "__main__":

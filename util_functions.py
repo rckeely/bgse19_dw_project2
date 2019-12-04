@@ -70,11 +70,10 @@ def initialize_thumbnails(static_df):
     return output
 
 
-def generate_table_df(longdata, week_start, week_end, blocked_teams, thumbnails = None, results_df = None):
-    results_df = optimize_season(longdata, week_start=week_start,
-                                 week_end=week_end, blocked_teams=blocked_teams)
+def generate_table_df(optimizer, week_start, week_end, blocked_teams, thumbnails = None):
+    results_df = optimizer.optimize_season(week_start=week_start, week_end=week_end, blocked_teams=blocked_teams)
 
-    longdata = longdata[['week', 'team', 'elo']]
+    longdata = optimizer.longdata[['week', 'team', 'elo']]
     output = results_df.merge(longdata, how='left')
     # output['image'] = output['team'].map(str) + '.png'
     if thumbnails is None:
@@ -91,6 +90,13 @@ def generate_table_df(longdata, week_start, week_end, blocked_teams, thumbnails 
     return output
 
 
+# generating the same probability table as before, without including thumbnails in the dataframe
+def no_thumbs_table_df(static_df, optimizer, week_start, week_end, blocked_teams):
+    results_df = optimizer.optimize_season(week_start=week_start, week_end=week_end, blocked_teams=blocked_teams)
+    results_df['fullname'] = results_df['team'].apply(get_full_name)
+    return results_df.join(static_df.set_index('ShortCode'), on='team')
+
+
 def fix_strings(string_var, start=False):
     if string_var == '':
         if start:
@@ -103,7 +109,7 @@ def fix_strings(string_var, start=False):
 
 
 ### App Layout Functions ###
-def get_selector_div(longdata, week_start, week_end, blocked_teams, static_df):
+def get_selector_div(static_df):
     return html.Div(className="map_div", children=[
         dcc.Graph(
             id='graph-1-tabs',
@@ -119,62 +125,74 @@ def get_selector_div(longdata, week_start, week_end, blocked_teams, static_df):
             })])
 
 
-def get_table_div(longdata, results_df, week_start, week_end, blocked_teams, thumbnails):
+def get_table_div(optimizer, week_start, week_end, blocked_teams, thumbnails):
     week_start = fix_strings(week_start, start=True)
     week_end = fix_strings(week_end)
-    results_df = generate_table_df(longdata, week_start=week_start, week_end=week_end,
-                                   blocked_teams=blocked_teams, thumbnails=thumbnails, results_df=results_df)
+    results_df = generate_table_df(optimizer, week_start=week_start, week_end=week_end, blocked_teams=blocked_teams, thumbnails=thumbnails)
     return html.Div(className="render_div", children=
                 dbc.Table.from_dataframe(df=results_df,
                                     id="main_table"))
 
 
-def get_projections_graph(longdata, results_df, week_start, week_end, blocked_teams,thumbnails):
+def get_projections_graph(static_df, optimizer, week_start, week_end, blocked_teams):
     week_start = fix_strings(week_start, start=True)
     week_end = fix_strings(week_end)
 
-    graph_df = generate_table_df(longdata, week_start=week_start, week_end=week_end,
-                                 blocked_teams=blocked_teams, thumbnails=thumbnails,results_df=results_df)
+    graph_df = no_thumbs_table_df(static_df, optimizer, week_start=week_start, week_end=week_end, blocked_teams=blocked_teams)
 
-    graph_df['wp'] = [float(i[:(len(i)-1)]) / 100 for i in graph_df.WinProb]
+    graph_df['optimised'] = graph_df.prob.cumprod()
 
-    graph_df['Optimized'] = graph_df.wp.cumprod()
-
+    images = []
+    for x, y, team in zip(graph_df['week'], graph_df['optimised'], graph_df['team']):
+        images.append(
+            dict(
+                source=f'assets/{team}.png',
+                xref="paper", yref="paper",
+                x=(x - week_start) / (week_end - week_start), y=y,
+                sizex=0.1, sizey=0.1,
+                xanchor="center", yanchor="middle"
+            )
+        )
 
     output = html.Div(className = 'proj_graph',children=
-        dcc.Graph(
-            figure=dict(
-                data=[
-                    dict(
-                        x=graph_df['Week'],
-                        y=graph_df['Optimized'],
-                        #text=graph_df['Team'],
-                        name='Optimized',
-                        marker=dict(
-                            color='rgb(55, 83, 109)'
-                        ),
-                        fill='tozeroy'
-                    )
-                ],
-                layout=dict(
-                    title='Cumulative Survival Likelihood',
-                    font = dict(family= "Courier New, monospace",
-                            size=18,
-                            color='#7f7f7f'),
-                    xaxis = {'title': 'Week',
-                             'range': [week_start,week_end]},
-                    yaxis = {'range': [0,1],
-                             'tickformat': ',.0%'},
-                    showlegend=False,
-                    legend=dict(
-                        x=0,
-                        y=1.0
+    dcc.Graph(
+        figure=dict(
+            data=[
+                dict(
+                    x=graph_df['week'],
+                    y=graph_df['optimised'],
+                    text=graph_df['fullname'],
+                    name='Optimized',
+                    marker=dict(
+                        color='rgb(55, 83, 109)'
                     ),
-                    margin=dict(l=50, r=0, t=100, b=30)
+                    fill='tozeroy'
                 )
-            ),
-            style={'height': 450},
-            id='projections-graph'
-        ))
+            ],
+            layout=dict(
+                title='Cumulative Survival Likelihood',
+                font=dict(family="Courier New, monospace",
+                          size=18,
+                          color='#7f7f7f'),
+                xaxis={'title': 'Week',
+                       'range': [week_start, week_end],
+                       'fixedrange': True
+                       },
+                yaxis={'range': [0, 1],
+                       'tickformat': ',.0%',
+                       'fixedrange': True
+                       },
+                images=images,
+                showlegend=False,
+                legend=dict(
+                    x=0,
+                    y=1.0
+                ),
+                margin=dict(l=50, r=0, t=100, b=30)
+            )
+        ),
+        style={'height': 450},
+        id='projections-graph'
+    ))
 
     return output
