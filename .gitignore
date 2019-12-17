@@ -6,3 +6,6 @@ test
 __pycache__/
 configs/googleMaps_API_key.json
 DWHW1.pem
+container/*.py
+container/assets
+container/data
