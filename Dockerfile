@@ -7,4 +7,5 @@ ADD data /data
 ADD assets /assets
 ADD *.py /
 
-CMD ["python", "flask_server.py"]
+# we pass -u to ensure that print output is shown in docker
+CMD ["python", "-u", "flask_server.py"]
