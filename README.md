@@ -27,5 +27,6 @@ docker push rckeely/dw2_flask
 
 On the remote system:
 ``` shell
+docker pull rckeely/dw2_flask:latest
 docker run -d --name dw2_flask -p 80:5000 rckeely/dw2_flask
 ```
