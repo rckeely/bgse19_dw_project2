@@ -161,8 +161,11 @@ def get_projections_graph(static_df, optimizer, week_start, week_end, blocked_te
                 dict(
                     x=graph_df['week'],
                     y=graph_df['optimised'],
+                    customdata=graph_df['prob']*100,
                     text=graph_df['fullname'],
-                    name='Optimized',
+                    hovertemplate='<b>%{text}</b><br>' +
+                                  '<i>Weekly WP: %{customdata:.0f}%</i>',
+                    name='',
                     marker=dict(
                         color='rgb(55, 83, 109)'
                     ),
